@@ -25,7 +25,7 @@ that files.
 Include the following dependency in your `project.clj` file:
 
 ```clojure
-:dependencies [[environ-plus "0.1.0"]]
+:dependencies [[environ-plus "0.1.1"]]
 ```
 
 
