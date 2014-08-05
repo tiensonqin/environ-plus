@@ -40,7 +40,7 @@
   (let [confs [(read-env-file)
                (read-conf-file)]
         env-confs (read-system-env)
-        confs (if (= "development" (:environ-plusment env-confs)) (reverse confs) confs)]
+        confs (if (= "development" (:environment env-confs)) (reverse confs) confs)]
     (merge
      (first confs)
      (second confs)
