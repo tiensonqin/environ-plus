@@ -30,12 +30,13 @@
                  [(sanitize k) v])))))
 
 (defn- read-conf-file []
-  (let [env-file (io/file "config.clj")]
-    (if (.exists env-file)
-      (into {} (for [[k v] (read-string (slurp env-file))]
-                 [(sanitize k) v])))))
+  (try (let [env-file (io/resource "config.clj")]
+         (into {} (for [[k v] (read-string (slurp env-file))]
+                    [(sanitize k) v])))
+       (catch Exception e
+         nil)))
 
-(defonce ^{:doc "A map of environ-plusment variables."}
+(defonce ^{:doc "A map of environment variables."}
   env
   (let [confs [(read-env-file)
                (read-conf-file)]
