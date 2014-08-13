@@ -23,27 +23,26 @@
        (map (fn [[k v]] [(keywordize k) v]))
        (into {})))
 
-(defn- read-env-file []
-  (let [env-file (io/file ".lein-env")]
+(defn read-file [file]
+  (let [env-file (io/file file)]
     (if (.exists env-file)
       (into {} (for [[k v] (read-string (slurp env-file))]
                  [(sanitize k) v])))))
 
-(defn- read-conf-file []
-  (try (let [env-file (io/resource "config.clj")]
+(defn read-resource [resource]
+  (try (let [env-file (io/resource resource)]
          (into {} (for [[k v] (read-string (slurp env-file))]
                     [(sanitize k) v])))
        (catch Exception e
          nil)))
 
-(defonce ^{:doc "A map of environment variables."}
+(def ^{:doc "A map of environment variables."}
   env
-  (let [confs [(read-env-file)
-               (read-conf-file)]
-        env-confs (read-system-env)
-        confs (if (= "development" (:environment env-confs)) (reverse confs) confs)]
-    (merge
-     (first confs)
-     (second confs)
-     env-confs
-     (read-system-props))))
+  (let [conf (read-resource "config.clj")
+        envs (read-system-env)
+        props (read-system-props)]
+    (merge conf
+           (when (.exists (io/file ".lein-env"))
+             (read-file ".lein-env"))
+           envs
+           props)))
