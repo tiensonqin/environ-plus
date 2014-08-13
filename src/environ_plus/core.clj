@@ -30,7 +30,7 @@
                  [(sanitize k) v])))))
 
 (defn- read-conf-file []
-  (let [env-file (io/file "conf/production.clj")]
+  (let [env-file (io/file "config.clj")]
     (if (.exists env-file)
       (into {} (for [[k v] (read-string (slurp env-file))]
                  [(sanitize k) v])))))
