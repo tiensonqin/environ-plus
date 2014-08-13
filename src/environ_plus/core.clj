@@ -36,13 +36,13 @@
        (catch Exception e
          nil)))
 
-(def ^{:doc "A map of environment variables."}
+(defonce ^{:doc "A map of environment variables."}
   env
-  (let [conf (read-resource "config.clj")
-        envs (read-system-env)
+  (let [envs (read-system-env)
         props (read-system-props)]
-    (merge conf
-           (when (.exists (io/file ".lein-env"))
-             (read-file ".lein-env"))
-           envs
-           props)))
+    (merge
+     (read-resource "config.clj")
+     (when (.exists (io/file ".lein-env"))
+       (read-file ".lein-env"))
+     envs
+     props)))
