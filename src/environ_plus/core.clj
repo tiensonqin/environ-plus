@@ -36,13 +36,19 @@
        (catch Exception e
          nil)))
 
+(defn get-environment
+  [envs]
+  (if-let [environment (:environment envs)]
+    environment
+    "local"))
+
 (defonce ^{:doc "A map of environment variables."}
   env
   (let [envs (read-system-env)
-        props (read-system-props)]
+        props (read-system-props)
+        environment (get-environment envs)
+        config (read-resource (str "config/" environment ".clj"))]
     (merge
-     (read-resource "config.clj")
-     (when (.exists (io/file ".lein-env"))
-       (read-file ".lein-env"))
-     envs
+     config
+     (assoc envs :environment (keyword environment))
      props)))
