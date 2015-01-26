@@ -23,12 +23,6 @@
        (map (fn [[k v]] [(keywordize k) v]))
        (into {})))
 
-(defn read-file [file]
-  (let [env-file (io/file file)]
-    (if (.exists env-file)
-      (into {} (for [[k v] (read-string (slurp env-file))]
-                 [(sanitize k) v])))))
-
 (defn read-resource [resource]
   (try (let [env-file (io/resource resource)]
          (into {} (for [[k v] (read-string (slurp env-file))]
@@ -38,9 +32,11 @@
 
 (defn get-environment
   [envs]
-  (if-let [environment (:environment envs)]
-    environment
-    "local"))
+  (case (:environment envs)
+        "test" "test"
+        "ci" "ci"
+        "production" "production"
+        "development"))
 
 (defonce ^{:doc "A map of environment variables."}
   env
