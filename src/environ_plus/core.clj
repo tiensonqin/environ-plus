@@ -14,8 +14,8 @@
 (defonce ^{:doc "A map of environment variables."}
   env
   (let [environment (if (:environment environ/env) (:environment environ/env) "development")
-        config (-> (read-config-file (format "config/%s.edn" environment))
-                   (assoc :environment (keyword environment)))]
+        config (read-config-file (format "config/%s.edn" environment))]
     (merge
      config
-     environ/env)))
+     environ/env
+     {:environment (keyword environment)})))

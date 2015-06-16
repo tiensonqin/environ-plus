@@ -1,4 +1,4 @@
-(defproject environ-plus "0.2.0"
+(defproject environ-plus "0.2.1"
   :description "Core environ-plus library for use in applications"
   :url "https://github.com/tiensonqin/environ-plus"
   :scm {:dir ".."}
