@@ -4,13 +4,6 @@
             [clojure.java.io :as io])
   (:import java.io.PushbackReader))
 
-(defn read-resource [resource]
-  (try (let [env-file (io/resource resource)]
-         (into {} (for [[k v] (read-string (slurp env-file))]
-                    [(sanitize k) v])))
-       (catch Exception e
-         nil)))
-
 (defn- read-config-file [path]
   (try
     (with-open [r (-> path io/resource io/reader PushbackReader.)]
